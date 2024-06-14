@@ -14,10 +14,8 @@ import org.apache.ftpserver.usermanager.impl.BaseUser;
  * Hello world!
  *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
+public class App {
+    public static void main(String[] args) {
 
         try {
             // Crear un UserManager basado en el archivo users.properties
