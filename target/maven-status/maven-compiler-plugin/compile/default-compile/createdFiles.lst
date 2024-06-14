@@ -1,0 +1,3 @@
+com\guille\models\User.class
+com\guille\App.class
+com\guille\managers\CustomUserManager.class
