@@ -1,4 +1,0 @@
-com\guille\App.class
-com\guille\manager\InMemoryUserManager.class
-com\guille\models\CustomUser.class
-com\guille\models\Entity.class
