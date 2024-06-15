@@ -1,5 +1,6 @@
 package com.guille.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ftpserver.ftplet.Authority;
@@ -11,52 +12,62 @@ import org.apache.ftpserver.ftplet.User;
  */
 public class CustomUser implements User {
 
+  private Entity entity;
+
+  public CustomUser(Entity entity) {
+    this.entity = entity;
+  }
+
   @Override
   public String getName() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    return this.entity.getUsername();
   }
 
   @Override
   public String getPassword() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+    return this.entity.getPassword();
   }
 
   @Override
   public List<? extends Authority> getAuthorities() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
+    return this.entity.getAuthorities();
   }
 
   @Override
   public List<? extends Authority> getAuthorities(Class<? extends Authority> clazz) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
+    List<Authority> selectedAuthorities = new ArrayList<>();
+    for (Authority authority : this.entity.getAuthorities()) {
+      if (clazz.isInstance(authority)) {
+        selectedAuthorities.add(authority);
+      }
+    }
+    return selectedAuthorities;
   }
 
   @Override
   public AuthorizationRequest authorize(AuthorizationRequest request) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'authorize'");
+    for (Authority authority : this.entity.getAuthorities()) {
+      AuthorizationRequest authorizationRequest = authority.authorize(request);
+      if (authorizationRequest != null) {
+        return authorizationRequest;
+      }
+    }
+    return null;
   }
 
   @Override
   public int getMaxIdleTime() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getMaxIdleTime'");
+    return this.entity.getMaxIdleTimeSec();
   }
 
   @Override
   public boolean getEnabled() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getEnabled'");
+    return this.entity.isEnabled();
   }
 
   @Override
   public String getHomeDirectory() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getHomeDirectory'");
+    return this.entity.getHomeDir();
   }
 
 }

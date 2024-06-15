@@ -1,3 +1,4 @@
-com\guille\models\User.class
 com\guille\App.class
-com\guille\managers\CustomUserManager.class
+com\guille\manager\InMemoryUserManager.class
+com\guille\models\CustomUser.class
+com\guille\models\Entity.class
