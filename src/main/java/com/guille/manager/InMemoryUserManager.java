@@ -1,27 +1,27 @@
 package com.guille.manager;
 
+import com.guille.models.Account;
+import com.guille.models.persist.Customer;
 import java.util.List;
-
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
-
-import com.guille.models.CustomUser;
-import com.guille.models.Entity;
+import org.apache.ftpserver.usermanager.impl.BaseUser;
 
 /**
  * InMemoryUserManager
  */
 public class InMemoryUserManager {
 
-  private PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+  private PropertiesUserManagerFactory userManagerFactory =
+      new PropertiesUserManagerFactory();
   public UserManager userManager = this.userManagerFactory.createUserManager();
 
-  public void save(List<Entity> users) throws FtpException {
+  public void save(List<Customer> users) throws FtpException {
 
     users.stream().forEach(user -> {
-      CustomUser customUser = new CustomUser(user);
+      BaseUser customUser = new BaseUser(new Account(user));
       try {
         this.userManager.save(customUser);
       } catch (FtpException e) {
@@ -37,5 +37,4 @@ public class InMemoryUserManager {
       System.out.println("Permisos: " + user.getAuthorities());
     }
   }
-
 }

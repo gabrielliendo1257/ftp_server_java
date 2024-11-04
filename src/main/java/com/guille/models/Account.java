@@ -1,42 +1,51 @@
 package com.guille.models;
 
+import com.guille.models.persist.Authorities;
+import com.guille.models.persist.Customer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.usermanager.impl.WritePermission;
 
 /**
  * CustomUser
  */
-public class CustomUser implements User {
+public class Account implements User {
 
-  private Entity entity;
+  private int maxIdleTimeSec = 0;
+  private Customer customer;
 
-  public CustomUser(Entity entity) {
-    this.entity = entity;
-  }
+  public Account() {}
+
+  public Account(Customer customer) { this.customer = customer; }
 
   @Override
   public String getName() {
-    return this.entity.getUsername();
+    return this.customer.getUsername();
   }
 
   @Override
   public String getPassword() {
-    return this.entity.getPassword();
+    return this.customer.getPassword();
   }
 
   @Override
   public List<? extends Authority> getAuthorities() {
-    return this.entity.getAuthorities();
+    List<Authority> selected = new ArrayList<>();
+    for (Authorities authorities : this.customer.getAuthorities()) {
+      if (authorities.getPermissions().toString().equalsIgnoreCase("write"))
+        selected.add(new WritePermission());
+    }
+    return selected;
   }
 
   @Override
-  public List<? extends Authority> getAuthorities(Class<? extends Authority> clazz) {
+  public List<? extends Authority>
+  getAuthorities(Class<? extends Authority> clazz) {
     List<Authority> selectedAuthorities = new ArrayList<>();
-    for (Authority authority : this.entity.getAuthorities()) {
+    for (Authority authority : this.getAuthorities()) {
       if (clazz.isInstance(authority)) {
         selectedAuthorities.add(authority);
       }
@@ -46,7 +55,7 @@ public class CustomUser implements User {
 
   @Override
   public AuthorizationRequest authorize(AuthorizationRequest request) {
-    for (Authority authority : this.entity.getAuthorities()) {
+    for (Authority authority : this.getAuthorities()) {
       AuthorizationRequest authorizationRequest = authority.authorize(request);
       if (authorizationRequest != null) {
         return authorizationRequest;
@@ -57,17 +66,16 @@ public class CustomUser implements User {
 
   @Override
   public int getMaxIdleTime() {
-    return this.entity.getMaxIdleTimeSec();
+    return this.maxIdleTimeSec;
   }
 
   @Override
   public boolean getEnabled() {
-    return this.entity.isEnabled();
+    return this.customer.getIsEnabed();
   }
 
   @Override
   public String getHomeDirectory() {
-    return this.entity.getHomeDir();
+    return this.customer.getHomeDir();
   }
-
 }
