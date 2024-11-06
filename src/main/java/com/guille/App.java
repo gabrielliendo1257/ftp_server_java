@@ -1,6 +1,8 @@
 package com.guille;
 
 import com.guille.connection.database.SqlConnect;
+import com.guille.shell.commands.FtpSet;
+import picocli.CommandLine;
 
 /**
  * Hello world!
@@ -9,8 +11,11 @@ import com.guille.connection.database.SqlConnect;
 public class App {
   public static void main(String[] args) {
 
+    Integer exitCode =
+        new CommandLine(new FtpSet()).execute("-u=pacoweb", "-p=pacopassword");
+
     SqlConnect sqlConnect = new SqlConnect();
-    sqlConnect.init();
+    sqlConnect.initConnection();
 
     // Obtén la ruta del directorio actual
     // Path currentPath = Paths.get("").toAbsolutePath();

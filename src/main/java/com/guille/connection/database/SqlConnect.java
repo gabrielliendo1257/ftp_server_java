@@ -1,6 +1,7 @@
 package com.guille.connection.database;
 
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +17,15 @@ public class SqlConnect {
     log.info("Ruta raíz del proyecto en bloque estático: " + url);
   }
 
-  public void init() {
-    try (var conn = DriverManager.getConnection(url)) {
+  public Connection initConnection() {
+    Connection conn = null;
+    try {
+      conn = DriverManager.getConnection(url);
       log.info("Conexion exitosa.");
       log.info("Path de la base de datos: " + url);
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    return conn;
   }
 }
