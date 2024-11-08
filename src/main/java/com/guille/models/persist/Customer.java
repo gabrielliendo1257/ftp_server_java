@@ -14,7 +14,9 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
+import lombok.ToString;
 
+@ToString
 @Entity
 @Table(name = "customers")
 @EntityListeners(CustomerListener.class)

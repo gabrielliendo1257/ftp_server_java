@@ -23,6 +23,6 @@ public class AuthorityService {
   }
 
   public Authorities getAutthorityById(Integer id) {
-    return this.aRepository.getReferenceById(id);
+    return this.aRepository.findById(id).orElseThrow();
   }
 }

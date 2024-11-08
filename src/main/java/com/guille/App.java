@@ -1,6 +1,5 @@
 package com.guille;
 
-import com.guille.connection.database.SqlConnect;
 import com.guille.shell.commands.FtpSet;
 import picocli.CommandLine;
 
@@ -14,9 +13,9 @@ public class App {
     Integer exitCode =
         new CommandLine(new FtpSet()).execute("-u=pacoweb", "-p=pacopassword");
 
-    SqlConnect sqlConnect = new SqlConnect();
-    sqlConnect.initConnection();
-
+    // SqlConnect sqlConnect = new SqlConnect();
+    // sqlConnect.initConnection();
+    //
     // Obtén la ruta del directorio actual
     // Path currentPath = Paths.get("").toAbsolutePath();
     // // Construye la ruta hacia el pom.xml

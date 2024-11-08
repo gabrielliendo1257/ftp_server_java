@@ -23,6 +23,6 @@ public class CustomerService {
   }
 
   public Customer getCustomerById(Integer id) {
-    return this.customerRepository.getReferenceById(id);
+    return this.customerRepository.findById(id).orElseThrow();
   }
 }
