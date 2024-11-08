@@ -1,0 +1,13 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+    <persistence-unit name="miUnidadDePersistencia">
+        <class>com.guille.models.persist.Customer</class> <!-- Agrega aquí tus entidades -->
+        <class>com.guille.models.persist.Authorities</class> <!-- Agrega aquí tus entidades -->
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/home/piter/codes/java/practicas/ftp_server_java/db/imp_data.db"/>
+            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLiteDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

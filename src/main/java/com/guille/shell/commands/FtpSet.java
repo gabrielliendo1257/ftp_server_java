@@ -6,14 +6,15 @@ import com.guille.models.persist.Customer;
 import com.guille.service.CustomerService;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
-import org.springframework.beans.factory.annotation.Autowired;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 @Command(name = "ftpset", description = "Setear los properties del ftp.")
 public class FtpSet implements Callable<Integer> {
 
-  @Autowired private CustomerService customerService;
+  CustomerService customerService = new CustomerService();
+
+  // @Autowired private CustomerService customerService;
 
   @Option(names = {"-u", "--username"}, description = "Setter username.")
   private String username;
@@ -28,11 +29,7 @@ public class FtpSet implements Callable<Integer> {
     var customer =
         new Customer(username, password, "D:/",
                      Arrays.asList(new Authorities(Permissions.WRITE)));
-    this.customerService.saveCustomer(customer);
-    System.out.println("Customer guardado con ezito!");
-    var cust = this.customerService.getCustomerById(1);
-    System.out.println(
-        this.customerService.getCustomerById(cust.getId()).toString());
+    System.out.println(customer);
     return 0;
   }
 }
