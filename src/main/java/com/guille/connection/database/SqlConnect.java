@@ -11,6 +11,10 @@ public class SqlConnect {
 
   private static String url;
 
+  private Connection conn = null;
+
+  private String statementSql = "INSERT INTO ";
+
   static {
     url = "jdbc:sqlite:" + Paths.get("").toAbsolutePath().toString() +
           "/db/imp_data.db";
@@ -18,10 +22,12 @@ public class SqlConnect {
   }
 
   public Connection initConnection() {
-    Connection conn = null;
     try {
-      conn = DriverManager.getConnection(url);
-      log.info("Conexion exitosa.");
+
+      if (conn == null) {
+        conn = DriverManager.getConnection(url);
+      }
+      log.info("Conexion exitosa con la base de datos.");
       log.info("Path de la base de datos: " + url);
     } catch (SQLException e) {
       e.printStackTrace();
