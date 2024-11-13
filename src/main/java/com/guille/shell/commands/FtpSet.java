@@ -1,10 +1,7 @@
 package com.guille.shell.commands;
 
-import com.guille.enums.Permissions;
-import com.guille.models.persist.Authorities;
+import com.guille.mapper.CustomerMapper;
 import com.guille.models.persist.Customer;
-import com.guille.service.CustomerService;
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -12,7 +9,7 @@ import picocli.CommandLine.Option;
 @Command(name = "ftpset", description = "Setear los properties del ftp.")
 public class FtpSet implements Callable<Integer> {
 
-  CustomerService customerService = new CustomerService();
+  private CustomerMapper customerMapper = new CustomerMapper();
 
   // @Autowired private CustomerService customerService;
 
@@ -26,10 +23,19 @@ public class FtpSet implements Callable<Integer> {
   public Integer call() throws Exception {
     System.out.println("Username: " + this.username);
     System.out.println("Password: " + this.password);
-    var customer =
-        new Customer(username, password, "D:/",
-                     Arrays.asList(new Authorities(Permissions.WRITE)));
+    var customer = new Customer(username, password, "D:/");
+
+    this.customerMapper.createTablaCustomer();
     System.out.println(customer);
+    this.customerMapper.saveCustomer(customer);
+
+    System.out.println("Customer persistido con exito.");
+
+    System.out.println("Customer recuperado con id=2: " +
+                       this.customerMapper.findCustomerById(2));
+
+    this.customerMapper.recoveryData();
+
     return 0;
   }
 }

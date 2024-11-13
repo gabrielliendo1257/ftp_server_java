@@ -11,9 +11,9 @@ public class SqlConnect {
 
   private static String url;
 
-  private Connection conn = null;
+  private static Connection conn = null;
 
-  private String statementSql = "INSERT INTO ";
+  private SqlConnect() {}
 
   static {
     url = "jdbc:sqlite:" + Paths.get("").toAbsolutePath().toString() +
@@ -21,7 +21,7 @@ public class SqlConnect {
     log.info("Ruta raíz del proyecto en bloque estático: " + url);
   }
 
-  public Connection initConnection() {
+  public static Connection initConnection() {
     try {
 
       if (conn == null) {

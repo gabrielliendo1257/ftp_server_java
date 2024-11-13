@@ -1,6 +1,7 @@
 package com.guille.models.persist;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.ToString;
@@ -17,17 +18,15 @@ public class Customer {
 
   private String homeDir = null;
 
-  private LocalDate createdAt;
+  private String createdAt = LocalDate.now().toString();
 
   private Boolean isEnabed = true;
 
-  private List<Authorities> authorities;
+  private List<Authorities> authorities = new ArrayList<>();
 
-  public Customer(String username, String password, String homeDir,
-                  List<Authorities> authorities) {
+  public Customer(String username, String password, String homeDir) {
     this.username = username;
     this.password = password;
     this.homeDir = homeDir;
-    this.authorities = authorities;
   }
 }
