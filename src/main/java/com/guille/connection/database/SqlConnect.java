@@ -1,37 +1,32 @@
 package com.guille.connection.database;
 
-import java.nio.file.Paths;
+import com.guille.configuration.DatabaseConfiguration;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import lombok.extern.slf4j.Slf4j;
+import javax.sql.DataSource;
 
-@Slf4j
 public class SqlConnect {
-
-  private static String url;
 
   private static Connection conn = null;
 
-  private SqlConnect() {}
+  private static final DatabaseConfiguration databaseConfiguration =
+      new DatabaseConfiguration();
 
-  static {
-    url = "jdbc:sqlite:" + Paths.get("").toAbsolutePath().toString() +
-          "/db/imp_data.db";
-    log.info("Ruta raíz del proyecto en bloque estático: " + url);
-  }
+  private SqlConnect() {}
 
   public static Connection initConnection() {
     try {
-
+      DataSource dataSource = getDataSource();
       if (conn == null) {
-        conn = DriverManager.getConnection(url);
+        conn = dataSource.getConnection();
       }
-      log.info("Conexion exitosa con la base de datos.");
-      log.info("Path de la base de datos: " + url);
     } catch (SQLException e) {
       e.printStackTrace();
     }
     return conn;
+  }
+
+  public static DataSource getDataSource() {
+    return databaseConfiguration.getDatasource();
   }
 }
