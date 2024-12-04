@@ -93,7 +93,7 @@ public class Networking {
       processBuilder.command(
           "powershell.exe", "-Command",
           "(Get-NetIPAddress | Where-Object { $_.InterfaceAlias "
-              + "-like '*Wi-Fi*'' -and $_.AddressFamily -eq 'IPv4' "
+              + "-like '*Wi-Fi*' -and $_.AddressFamily -eq 'IPv4' "
               + "}).IPAddress"); // Comando
                                  // de
                                  // ejemplo
