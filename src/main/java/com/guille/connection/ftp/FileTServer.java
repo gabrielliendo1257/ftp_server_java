@@ -23,8 +23,11 @@ public class FileTServer {
 
   public FileTServer(Integer port, Boolean isPublic) {
     this.port = port;
-    if (isPublic != null) {
+    String system = System.getProperty("os.name");
+    if (isPublic != null && !system.toLowerCase().contains("windows")) {
       this.host = this.net.getIpLAN();
+    } else if (isPublic != null && system.toLowerCase().contains("windows")) {
+      this.host = this.net.getPublicIp();
     } else {
       this.host = this.net.getInetAddress();
     }

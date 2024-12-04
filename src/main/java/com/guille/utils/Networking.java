@@ -2,13 +2,11 @@ package com.guille.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.URL;
 import java.util.Enumeration;
 
 public class Networking {
@@ -88,23 +86,39 @@ public class Networking {
   }
 
   public String getPublicIp() {
-    final String ipServiceUrl = "https://api.ipify.org";
 
     try {
-      URL url = new URL(ipServiceUrl);
-      HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-      connection.setRequestMethod("GET");
+      // Crear un proceso con ProcessBuilder
+      ProcessBuilder processBuilder = new ProcessBuilder();
+      processBuilder
+          .command("powershell.exe", "-Command",
+                   "(Get-NetIPAddress | Where-Object { $_.InterfaceAlias " +
+                   "-like '*Wi-Fi*'' -and $_.AddressFamily -eq 'IPv4' " +
+                   "}).IPAddress"); // Comando
+                                    // de
+                                    // ejemplo
 
-      BufferedReader reader = new BufferedReader(
-          new InputStreamReader(connection.getInputStream()));
-      this.publicAddres = reader.readLine();
+      // Iniciar el proceso
+      Process process = processBuilder.start();
 
-    } catch (MalformedURLException e) {
-      System.out.println("Url no valida.");
-      System.exit(1);
-    } catch (IOException e) {
-      System.out.println("Problemas de coneccion.");
-      System.exit(2);
+      // Capturar la salida del proceso
+      InputStream inputStream = process.getInputStream();
+      BufferedReader reader =
+          new BufferedReader(new InputStreamReader(inputStream));
+
+      String line;
+      while ((line = reader.readLine()) != null) {
+        this.publicAddres = line;
+        System.out.println(line);
+      }
+
+      // Esperar a que el proceso termine
+      int exitCode = process.waitFor();
+      System.out.println("El proceso terminó con código de salida: " +
+                         exitCode);
+
+    } catch (IOException | InterruptedException e) {
+      e.printStackTrace();
     }
 
     return this.publicAddres;
