@@ -90,26 +90,33 @@ public class Networking {
     try {
       // Crear un proceso con ProcessBuilder
       ProcessBuilder processBuilder = new ProcessBuilder();
-      processBuilder
-          .command("powershell.exe", "-Command",
-                   "(Get-NetIPAddress | Where-Object { $_.InterfaceAlias " +
-                   "-like '*Wi-Fi*'' -and $_.AddressFamily -eq 'IPv4' " +
-                   "}).IPAddress"); // Comando
-                                    // de
-                                    // ejemplo
+      processBuilder.command(
+          "powershell.exe", "-Command",
+          "(Get-NetIPAddress | Where-Object { $_.InterfaceAlias "
+              + "-like '*Wi-Fi*'' -and $_.AddressFamily -eq 'IPv4' "
+              + "}).IPAddress"); // Comando
+                                 // de
+                                 // ejemplo
 
       // Iniciar el proceso
       Process process = processBuilder.start();
 
-      // Capturar la salida del proceso
+      // Captura y muestra la salida estándar
       InputStream inputStream = process.getInputStream();
       BufferedReader reader =
           new BufferedReader(new InputStreamReader(inputStream));
-
       String line;
       while ((line = reader.readLine()) != null) {
-        this.publicAddres = line;
-        System.out.println(line);
+        System.out.println("Output: " + line);
+      }
+
+      // Captura y muestra la salida de error
+      InputStream errorStream = process.getErrorStream();
+      BufferedReader errorReader =
+          new BufferedReader(new InputStreamReader(errorStream));
+      String errorLine;
+      while ((errorLine = errorReader.readLine()) != null) {
+        System.err.println("Error: " + errorLine);
       }
 
       // Esperar a que el proceso termine
