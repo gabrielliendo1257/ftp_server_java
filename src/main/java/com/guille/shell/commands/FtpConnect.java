@@ -15,8 +15,7 @@ public class FtpConnect implements Callable<Integer> {
           required = true)
   String username;
 
-  @Option(names = {"-p", "--password"}, description = "Setter password.",
-          interactive = true)
+  @Option(names = {"-p", "--password"}, description = "Setter password.")
   String password;
 
   @Parameters(index = "0", description = "Host del servidor.",
