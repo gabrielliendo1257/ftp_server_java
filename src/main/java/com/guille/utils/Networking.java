@@ -91,12 +91,11 @@ public class Networking {
       // Crear un proceso con ProcessBuilder
       ProcessBuilder processBuilder = new ProcessBuilder();
       processBuilder.command(
-          "powershell.exe", "-Command",
-          "(Get-NetIPAddress | Where-Object { $_.InterfaceAlias "
-              + "-like '*Wi-Fi*' -and $_.AddressFamily -eq 'IPv4' "
-              + "}).IPAddress"); // Comando
-                                 // de
-                                 // ejemplo
+          "powershell.exe -Command '(Get-NetIPAddress | Where-Object { " +
+          "$_.InterfaceAlias -like \"*Wi-Fi*\" -and $_.AddressFamily -eq " +
+          "\"IPv4\" }).IPAddress'"); // Comando
+      // de
+      // ejemplo
 
       // Iniciar el proceso
       Process process = processBuilder.start();
