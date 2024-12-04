@@ -1,52 +1,35 @@
 package com.guille.shell.commands;
 
-import com.guille.models.persist.Customer;
+import com.guille.connection.ftp.FileTServer;
 import com.guille.service.CustomerService;
 import com.guille.utils.Networking;
 import java.util.concurrent.Callable;
 import lombok.ToString;
+import org.apache.ftpserver.ftplet.FtpException;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-@Command(name = "ftp", description = "Setear los properties del ftp.")
+@Command(name = "ftp", description = "Setear los properties del ftp.",
+         subcommands = {FtpConnect.class, FtpSave.class},
+         mixinStandardHelpOptions = true)
 public class FtpSet implements Callable<Integer> {
 
   private CustomerService customerService = new CustomerService();
-  private Networking net = new Networking();
+  private final Networking net = new Networking();
+  private final FileTServer fileTServer = new FileTServer();
 
-  // @Autowired private CustomerService customerService;
-
-  @ArgGroup(exclusive = true, validate = false)
-  SetterProperties setterProperties;
-
-  @ArgGroup(exclusive = true, validate = false) RunnerFtp runnerFtp;
-
-  @ToString
-  static class SetterProperties {
-
-    @Option(names = {"-u", "--username"}, description = "Setter username.")
-    String username;
-
-    @Option(names = {"-p", "--password"}, description = "Setter password.")
-    String password;
-
-    @Option(names = {"-d", "--directory"},
-            description = "Setter Home irectory.")
-    String homeDir;
-  }
+  @ArgGroup(exclusive = true, validate = false) private RunnerFtp runnerFtp;
 
   @ToString
   static class RunnerFtp {
 
-    @Option(names = {"-a", "--account"},
-            description = "Usuario ya authenticado para usarlo con el ftp",
-            required = true, type = String.class)
-    String username;
+    @Option(names = {"--public"},
+            description = "Activa el modo de host publico.", required = false)
+    Boolean publicHost;
 
-    @Option(names = {"-h", "--host"}, description = "Host de la maquina.",
-            required = false, type = String.class)
-    String host;
+    // @Parameters(index = "0", description = "Host de la maquina.", echo =
+    // true, type = InetAddress.class) InetAddress host;
 
     @Option(names = {"-x", "--port"}, description = "Puerto de escucha.",
             required = true, type = Integer.class)
@@ -56,20 +39,14 @@ public class FtpSet implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
 
-    if (this.setterProperties != null) {
-
-      var customer = new Customer(this.setterProperties.username,
-                                  this.setterProperties.password,
-                                  this.setterProperties.homeDir);
-
-      this.customerService.createTableCustomer();
-      this.customerService.saveCustomer(customer);
-
-    } else if (this.runnerFtp != null) {
-
-      this.customerService.printDataRecovery();
-      this.customerService.ftpRun(this.runnerFtp.port,
-                                  this.net.getInetAddress());
+    FileTServer fileTServer =
+        new FileTServer(this.runnerFtp.port, this.runnerFtp.publicHost);
+    try {
+      fileTServer.init();
+    } catch (FtpException e) {
+      System.out.println("Problemas al iniciar el servidor --> [ERROR] " +
+                         e.getMessage());
+      return 2;
     }
 
     return 0;

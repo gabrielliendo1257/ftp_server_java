@@ -98,7 +98,8 @@ public class CustomerMapper {
         customers.add(customer);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      System.out.println("[ERROR] " + e.getMessage());
+      System.exit(1);
     }
 
     return customers;
