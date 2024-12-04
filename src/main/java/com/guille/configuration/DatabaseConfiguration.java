@@ -16,6 +16,9 @@ public class DatabaseConfiguration {
     datasource.setJdbcUrl(url);
     datasource.setUsername("admin");
     datasource.setPassword("admin");
+    datasource.setMinimumIdle(2);
+    datasource.setIdleTimeout(10000);
+    datasource.setMaximumPoolSize(10000);
     datasource.setMaximumPoolSize(10);
 
     return datasource;

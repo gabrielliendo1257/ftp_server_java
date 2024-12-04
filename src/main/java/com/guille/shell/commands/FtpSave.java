@@ -18,8 +18,7 @@ public class FtpSave implements Callable<Integer> {
           required = true)
   String username;
 
-  @Option(names = {"-p", "--password"}, description = "Setter password.",
-          interactive = true)
+  @Option(names = {"-p", "--password"}, description = "Setter password.")
   String password;
 
   @Option(names = {"-d", "--directory"}, description = "Setter Home directory.",
